@@ -1,4 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase
+
 from src.database.postgres import DATABASE_URL
 
 

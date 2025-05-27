@@ -1,9 +1,8 @@
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
 
+from src.api import router
 from src.settings import settings
-from src.api.users import router as user_router
-
 
 app = FastAPI(
     title="Appointment",
@@ -18,7 +17,7 @@ async def health_check():
     return {"status": "healthy"}
 
 
-app.include_router(user_router)
+app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(

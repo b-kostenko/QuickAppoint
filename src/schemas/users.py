@@ -15,3 +15,7 @@ class UserResponse(BaseModel):
     uuid: str
     username: str
     email: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

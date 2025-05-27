@@ -38,6 +38,7 @@ class UserRepository:
 
         await session.commit()
         await session.refresh(user)
+        return user
 
     async def delete_user(self, user: User, session: AsyncSession) -> None:
         await session.delete(user)

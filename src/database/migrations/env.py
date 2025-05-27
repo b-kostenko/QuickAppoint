@@ -3,9 +3,9 @@ from logging.config import fileConfig
 from alembic import context
 from alembic.script import ScriptDirectory
 from sqlalchemy.ext.asyncio import create_async_engine
-from src.database.models.users import User
 
 from src.database import DATABASE_URL, Base
+from src.database.models.users import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
