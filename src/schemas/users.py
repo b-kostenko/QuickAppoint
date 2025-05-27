@@ -8,7 +8,6 @@ class UserSchema(BaseModel):
 
 class UserUpdateSchema(BaseModel):
     username: str | None = None
-    email: EmailStr | None = None
     password: str | None = None
 
 class UserResponse(BaseModel):
