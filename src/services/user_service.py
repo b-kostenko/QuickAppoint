@@ -1,9 +1,13 @@
+from typing import List
+
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
+from sqlalchemy.testing.suite.test_reflection import users
 
 from src.repositories.user_repository import UserRepository
-from src.schemas.users import UserSchema, UserResponse
+from src.schemas.users import UserSchema, UserResponse, UserUpdateSchema
+from src.utils.exceptions import UserNotFoundExceptions
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -29,6 +33,44 @@ class UserService:
             username=user.username,
             email=user.email
         )
+
+    async def get_users(self, session: AsyncSession) -> List[UserResponse]:
+        users = await self.user_repository.get_users(session=session)
+        if not users:
+            return []
+        return [UserResponse(
+            uuid=str(user.uuid),
+            username=user.username,
+            email=user.email
+        ) for user in users]
+
+    async def get_user_by_email(self, email: str, session: AsyncSession) -> UserResponse:
+        user = await self.user_repository.get_user_by_email(email=email, session=session)
+        if not user:
+            raise UserNotFoundExceptions(email=email)
+        return UserResponse(
+            uuid=str(user.uuid),
+            username=user.username,
+            email=user.email
+        )
+
+    async def update_user(self, user_input: UserUpdateSchema, email: str, session: AsyncSession) -> UserResponse:
+        user = await self.user_repository.get_user_by_email(email=email, session=session)
+        if not user:
+            raise UserNotFoundExceptions(email=email)
+        user = await self.user_repository.update_user(user=user, user_input=user_input, session=session)
+        return UserResponse(
+            uuid=str(user.uuid),
+            username=user.username,
+            email=user.email
+        )
+
+    async def delete_user(self, email: str, session: AsyncSession) -> None:
+        user = await self.user_repository.get_user_by_email(email=email, session=session)
+        if not user:
+            raise UserNotFoundExceptions(email=email)
+        await self.user_repository.delete_user(user=user, session=session)
+
 
 
 user_service = UserService()

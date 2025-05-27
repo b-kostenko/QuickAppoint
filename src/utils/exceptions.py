@@ -7,9 +7,9 @@ class BaseUserException(Exception):
 
 
 class UserNotFoundExceptions(BaseUserException):
-    def __init__(self, user_email: str):
+    def __init__(self, email: str):
         super().__init__(
-            message=f"User with email '{user_email}' not found"
+            message=f"User with email '{email}' not found"
         )
 
 class UserAlreadyExistsException(BaseUserException):
